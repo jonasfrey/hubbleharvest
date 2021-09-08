@@ -5,7 +5,14 @@ const { exit } = require('process');
 var buffer_image_size = require('buffer-image-size');
 var image_size = require('image-size');
 const { createCanvas, loadImage } = require('canvas')
+var fs = require('fs');
 
+var images_directory = "images";
+
+if (!fs.existsSync("./"+images_directory)) {
+  // Do something
+  fs.mkdirSync("./"+images_directory);
+}
 
 fs = require('fs');
 var make_absolute_url = function(maybe_relative_url, prefix = "https://hubblesite.org"){
@@ -92,7 +99,7 @@ var draw_text_with_bg_square = function(ctx, options){
 
   //console.log(text_measure);
 
-  ctx.fillStyle = (options.square_color) ? options.square_color : "rgba(0,0,0,0.8)"
+  ctx.fillStyle = (options.square_color) ? options.square_color : "rgba(0,0,0,0.7)"
 
 
   var posx = location_xy_object.x;
@@ -107,7 +114,7 @@ var draw_text_with_bg_square = function(ctx, options){
 
   ctx.fillRect(posx, posy, text_measure.width+padding_xy_object.x*2,text_measure.height+padding_xy_object.y*2)
 
-  ctx.fillStyle = (options.text_color) ? options.text_color : "rgba(255,255,255, 0.8)"
+  ctx.fillStyle = (options.text_color) ? options.text_color : "rgba(255,255,255, 0.7)"
   
 
 
@@ -203,7 +210,7 @@ make_request({url:url}, function(document){
         var dimensions = image_size(buffer);
                           
         var original_image_file_name =  day_ts+"_"+img_url.split("/").pop()
-         fs.writeFileSync( "./images/"+original_image_file_name, buffer);  
+         fs.writeFileSync( "./"+images_directory+"/"+original_image_file_name, buffer);  
 
          const canvas = createCanvas(dimensions.width, dimensions.height);
 
@@ -214,7 +221,7 @@ make_request({url:url}, function(document){
         //  const canvas_buffer = canvas.toBuffer('image/png')
         //  fs.writeFileSync(day_ts+"_"+img_url.split("/").pop(), buffer);       
          
-         loadImage( "./images/"+original_image_file_name).then(image => {
+         loadImage( "./"+images_directory+"/"+original_image_file_name).then(image => {
           var canvas_image_path_file_name = "from_canvas_"+original_image_file_name;
           var mimeend = canvas_image_path_file_name.split(".").pop();
           console.log(mimeend);
@@ -226,16 +233,16 @@ make_request({url:url}, function(document){
 
             font_size: font_size,
             font_family: "Arial",
-            square_color: "rgba(0,0,0,0.8)",
+            square_color: "rgba(0,0,0,0.7)",
             padding_xy_object: {x:font_size/2, y: font_size/2},
             location_xy_object: {x:20, y: 20},
-            text_color: "rgba(255,255,255,0.8)",
+            text_color: "rgba(255,255,255,0.7)",
             text: title
 
           })
           mimeend = mimeend.replace("jpg", "jpeg");
           const buffer = canvas.toBuffer('image/'+mimeend)
-          fs.writeFileSync( "./images/"+canvas_image_path_file_name, buffer)
+          fs.writeFileSync( "./"+images_directory+"/"+canvas_image_path_file_name, buffer)
         })
       });                                                                         
     }).end();
