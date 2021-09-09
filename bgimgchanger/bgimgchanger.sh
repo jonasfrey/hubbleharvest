@@ -18,7 +18,7 @@ echo "install crontab if not exists"
 
 scriptpathfilename=$(pwd)/bgimgchanger.sh
 
-grep "bash $scriptpathfilename" /etc/crontab || echo "*  *  *  *  * bash $scriptpathfilename" >> /etc/crontab
+grep "bash $scriptpathfilename" /etc/crontab || echo "0  *  *  *  * bash $scriptpathfilename" >> /etc/crontab
 
 
 echo "downloading img from hubbleharvest.ch:8080"
