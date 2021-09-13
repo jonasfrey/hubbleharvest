@@ -315,6 +315,10 @@ module.exports = {
                             return_data.canvas_image_path_file_name = "./" + images_directory + "/" +
                                 canvas_image_path_file_name;
 
+
+                            //delete old original file 
+                            fs.unlink("./" + images_directory + "/" + original_image_file_name);
+                            
                                 nodehttpserverresponse.setHeader("Content-Type", mimeend);
                                 nodehttpserverresponse.writeHead(200);
                                 nodehttpserverresponse.write(buffer,'binary');
